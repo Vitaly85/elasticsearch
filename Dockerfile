@@ -7,8 +7,8 @@ RUN yum install -y java
 # Install elasticsearch
 RUN yum install -y https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.4.2.noarch.rpm
 
-ADD elasticsearch.yml /usr/share/elasticsearch/elasticsearch.yml
-ADD logging.yml /usr/share/elasticsearch/logging.yml
+ADD elasticsearch.yml /usr/share/elasticsearch/config/elasticsearch.yml
+ADD logging.yml /usr/share/elasticsearch/config/logging.yml
 
 ENTRYPOINT ["/usr/share/elasticsearch/bin/elasticsearch"]
 CMD [""]
