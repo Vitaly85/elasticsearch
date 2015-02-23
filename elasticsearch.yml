@@ -1,1 +1,7 @@
+path:
+    data: /data/data
+    logs: /data/log
+    plugins: /data/plugins
+    work: /data/work
+
 http.cors.enabled: true

@@ -1,17 +1,24 @@
-FROM fedora:21
+#Elasticsearch 1.4.4
 
-MAINTAINER Yury Kavaliou <test@test.com>
+FROM dockerfile/java:oracle-java8
 
-RUN yum install -y java
+MAINTAINER Yury Kavaliou <Yury_Kavaliou@epam.com>
 
-# Install elasticsearch
-RUN yum install -y https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.4.2.noarch.rpm
+ENV ES_VERSION 1.4.4
 
-ADD elasticsearch.yml /usr/share/elasticsearch/config/elasticsearch.yml
-ADD logging.yml /usr/share/elasticsearch/config/logging.yml
+#Install elasticsearch
+RUN cd / \
+	&& curl -O https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-$ES_VERSION.tar.gz \
+	&& tar xzf elasticsearch-$ES_VERSION.tar.gz \
+	&& rm -f elasticsearch-$ES_VERSION.tar.gz \
+	&& mv elasticsearch-$ES_VERSION /elasticsearch
 
-ENTRYPOINT ["/usr/share/elasticsearch/bin/elasticsearch"]
-CMD [""]
+COPY elasticsearch.yml /elasticsearch/config/elasticsearch.yml
+COPY logging.yml /elasticsearch/config/logging.yml
+
+VOLUME ["/data", "/logs"]
+
+ENTRYPOINT ["/elasticsearch/bin/elasticsearch"]
 
 # Expose ports.
 #   - 9200: HTTP
