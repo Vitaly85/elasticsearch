@@ -1,6 +1,7 @@
-#Elasticsearch 1.4.4
+#Elasticsearch 2.2
 
-FROM dockerfile/java:oracle-java8
+FROM registry.hub.docker.com/java:8-jdk
+FROM fedora:20
 
 MAINTAINER Yury Kavaliou <Yury_Kavaliou@epam.com>
 
@@ -8,17 +9,28 @@ ENV ES_VERSION 1.4.4
 
 #Install elasticsearch
 RUN cd / \
-	&& curl -O https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-$ES_VERSION.tar.gz \
-	&& tar xzf elasticsearch-$ES_VERSION.tar.gz \
-	&& rm -f elasticsearch-$ES_VERSION.tar.gz \
-	&& mv elasticsearch-$ES_VERSION /elasticsearch
+	&& cd /opt \
+	&& yum install -y unzip \
+	&& yum install -y maven \
+	&& yum install -y hostname \
+	&& useradd -G root elastic \
+	&& curl -O -L -J https://github.com/elastic/elasticsearch/archive/2.2.zip \
+	&& unzip elasticsearch-2.2.zip \
+	&& rm *.zip \
+	&& chown -R elastic elasticsearch-2.2 \
+	&& cd elasticsearch-2.2 \
+	&& chmod +x run.sh
 
+COPY elasticsearch.sh /usr/local/bin/elasticsearch.sh
+
+RUN chmod +x /usr/local/bin/elasticsearch.sh
+RUN /usr/local/bin/elasticsearch.sh
 COPY elasticsearch.yml /elasticsearch/config/elasticsearch.yml
 COPY logging.yml /elasticsearch/config/logging.yml
 
 VOLUME ["/data", "/logs"]
 
-ENTRYPOINT ["/elasticsearch/bin/elasticsearch"]
+ENTRYPOINT ["/usr/bin/bash"]
 
 # Expose ports.
 #   - 9200: HTTP
