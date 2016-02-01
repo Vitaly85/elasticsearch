@@ -27,6 +27,7 @@ if [ ! -d /elasticsearch ] ; then
 fi
 mv -vf '/opt/elasticsearch-2.2.0-SNAPSHOT/'* /elasticsearch
 chown -R elastic /elasticsearch
+chown -R elastic /data
 echo "#######################"
 echo "Elastic installed OK"
 echo "#######################"
