@@ -24,13 +24,14 @@ RUN cd / \
 COPY elasticsearch.sh /usr/local/bin/elasticsearch.sh
 
 RUN chmod +x /usr/local/bin/elasticsearch.sh
+RUN mkdir /elasticserch
 RUN /usr/local/bin/elasticsearch.sh
 COPY elasticsearch.yml /elasticsearch/config/elasticsearch.yml
 COPY logging.yml /elasticsearch/config/logging.yml
 
 VOLUME ["/data", "/logs"]
 
-ENTRYPOINT ["/usr/bin/bash"]
+ENTRYPOINT ["su", "-c", "/elasticsearch/bin/elasticsearch", "elastic"]
 
 # Expose ports.
 #   - 9200: HTTP

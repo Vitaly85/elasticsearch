@@ -12,7 +12,21 @@ echo "#######################"
 echo "elasticsearch build OK" 
 echo "#######################"
 cp  /opt/elasticsearch-2.2/distribution/zip/target/releases/elasticsearch-2.2.0-SNAPSHOT.zip /opt
-unzip /opt/elasticsearch-2.2.0-SNAPSHOT.zip
-cp -r /opt/elasticsearch-2.2.0-SNAPSHOT/* /elasticsearch
-rm /opt/*zip
+cd /opt
+
+echo "#######################"
+echo "Start unzip"
+echo "#######################"
+unzip 'elasticsearch-2.2.0-SNAPSHOT.zip'
+echo "#######################"
+echo "Unzip Ok"
+echo "#######################"
+if [ ! -d /elasticsearch ] ; then
+	echo "Create elasticsearch directory"
+	mkdir /elasticsearch
+fi
+mv -vf '/opt/elasticsearch-2.2.0-SNAPSHOT/'* /elasticsearch
 chown -R elastic /elasticsearch
+echo "#######################"
+echo "Elastic installed OK"
+echo "#######################"
